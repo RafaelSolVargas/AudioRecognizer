@@ -1,4 +1,4 @@
-import time
+import sys
 from typing import List
 import speech_recognition as sr
 import moviepy.editor as mp
@@ -13,6 +13,13 @@ PATH_OF_VIDEO_FILE = "./exemplo.mp4"
 SYNC_LOCK = Lock()
 
 RECOGNITION_RESULTS_LIST = []
+
+
+def LoadVideoFromPath(path: str):
+    try:
+        return mp.VideoFileClip(path).subclip()
+    except Exception as e:
+        sys.exit("[ERRO] --> Verifique o caminho para o arquivo MP4 com o video para ter o audio extraído")
 
 
 def recognizeAudioWithGoogle(audio: AudioSegment, chunkIndex: int) -> str:
@@ -68,7 +75,7 @@ def compileResultsIntoFile():
 
 
 # Load the video called exemplo.mp4 in the current directory
-videoFile = mp.VideoFileClip(PATH_OF_VIDEO_FILE).subclip()
+videoFile = LoadVideoFromPath(PATH_OF_VIDEO_FILE)
 
 # Extract the audio form the videoFile and store into a file called audio.mp3
 videoFile.audio.write_audiofile("./audio.mp3")
